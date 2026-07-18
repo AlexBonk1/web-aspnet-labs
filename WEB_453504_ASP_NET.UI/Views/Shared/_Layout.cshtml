@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/open-iconic/font/css/open-iconic-bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/WebLabs_BSUIR_V02.styles.css" asp-append-
+          version="true" />
+</head>
+<body>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <header>
+        <div class="container">
+            <nav class="navbar bg-dark navbar-expand-md border-bottom border-body"
+                 data-bs-theme="dark">
+                <a class="navbar-brand" href="#">LabsV03</a>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="#">Лб 1</a>
+                    <a class="nav-item nav-link" href="#">Каталог</a>
+                    <a class="nav-item nav-link" href="#">Администрирование</a>
+                    <a class="nav-item nav-link" href="#">Политика конфиденциальности</a>
+                </div>
+                <a href="#" class="navbar-text ms-auto">
+                    00,0 руб <i class="bi bi-cart"></i> (0)
+                </a>
+                <div class="dropdown ms-4 nav-color">
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        User@gmail.com
+                        <img src="images/default-profile-picture.png" width="30"
+                             alt="User" class="rounded nav-color" />
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <span class="dropdown-item-text">
+                                Иванов Иван Иванович
+                                <img src="images/default-profile-picture.png"
+                                     width="30" alt="User" class="rounded" />
+                                user@gmail.com
+                            </span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form id="logoutForm" class="form-inline">
+
+                                <button id="logout" type="submit" class="nav-link
+                                    btn btn-link text-blue">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main class="container mt-4 mb-5">
+    @RenderBody()    
+    </main>
+    <footer>
+        <div class="container">
+            <div class="container">
+                <div class="navbar bg-dark navbar-expand-md border-bottom border-body"
+                     data-bs-theme="dark">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-item nav-link" href="http://www.facebook.com">
+                            <i class="bi bi-facebook" style="font-size: 2rem"></i>
+                        </a>
+                        <a class="nav-item nav-link" href="http://www.twitter.com">
+                            <i class="bi bi-twitter-x" style="font-size: 2rem"></i>
+                        </a>
+                        <a class="nav-item nav-link" href="http://www.telegram.com">
+                            <i class="bi bi-telegram" style="font-size: 2rem"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <scripts></scripts>
+</body>
+</html>
