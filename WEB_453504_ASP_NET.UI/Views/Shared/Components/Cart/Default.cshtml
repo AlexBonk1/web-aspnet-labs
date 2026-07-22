@@ -1,0 +1,8 @@
+﻿@model CartInfo
+@{
+    var Price = Math.Round(Model.Price, 2);
+    var Items = Model.Items;
+}
+<a asp-controller="Cart" asp-action="Index" class="navbar-text ms-auto">
+    @Price руб <i class="bi bi-cart"></i> (@Items)
+</a>

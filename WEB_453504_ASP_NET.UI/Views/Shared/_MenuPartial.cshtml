@@ -1,0 +1,15 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?
+   .ToString()?
+   .ToLower()
+   ?? String.Empty;
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString()?.ToLower() ?? String.Empty;
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString()?.ToLower() ?? String.Empty;
+}
+<a class="navbar-brand" href="/">LabsV03</a>
+<div class="navbar-nav">
+    <a class="nav-item nav-link @(currentController == "home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Лб 1</a>
+    <a class="nav-item nav-link @(currentController == "product" ? "active" : "")" asp-area="" asp-controller="Product" asp-action="Index">Каталог</a>
+    <a class="nav-item nav-link @(currentArea == "admin" ? "active" : "")" asp-area="Admin" asp-page="/Index">Администрирование</a>
+    <a class="nav-item nav-link @(currentArea == "policy" ? "active" : "")" asp-area="Policy" asp-page="/Index">Политика конфиденциальности</a>
+</div>
