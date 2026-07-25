@@ -1,8 +1,11 @@
+using WEB_453504_ASP_NET.UI.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.RegisterCustomServices();
 
 var app = builder.Build();
 
