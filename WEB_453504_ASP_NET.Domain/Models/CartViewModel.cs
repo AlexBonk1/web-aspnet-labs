@@ -1,4 +1,8 @@
-﻿namespace WEB_453504_ASP_NET.UI.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace WEB_453504_ASP_NET.Domain.Models
 {
     public class CartViewModel
     {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.Domain.Models;
-using WEB_453504_ASP_NET.Domain.Entities;
 
-namespace WEB_453504_ASP_NET.Domain.Services.InstrumentService
+namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
 {
     public interface IInstrumentService
     {

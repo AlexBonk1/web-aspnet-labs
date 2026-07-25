@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.Domain.Models;
-using WEB_453504_ASP_NET.Domain.Services.CategoryService;
-using WEB_453504_ASP_NET.Domain.Services.InstrumentService;
+using WEB_453504_ASP_NET.UI.Services.CategoryService;
 
 namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
 {
@@ -14,16 +13,20 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
         List<MusicalInstrument> _filtered;
         int pageNo;
         int pageSize;
-        private int PageCount {get {
+        private int PageCount
+        {
+            get
+            {
                 int count = _filtered.Count;
-                var ceil = Math.Ceiling((decimal)count/ pageSize);
+                var ceil = Math.Ceiling((decimal)count / pageSize);
                 return (int)ceil;
-            }}
+            }
+        }
         public MemoryInstrumentService([FromServices] IConfiguration config, ICategoryService categoryService)
         {
-                _categories = categoryService.GetCategoryListAsync()
-                .Result
-                .Data;
+            _categories = categoryService.GetCategoryListAsync()
+            .Result
+            .Data;
             pageSize = int.Parse(config["ItemsPerPage"]);
             SetupData();
         }
@@ -167,7 +170,7 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
                 }
             };
         }
-        
+
         public Task<ResponseData<MusicalInstrument>> CreateInstrumentAsync(MusicalInstrument instrument, IFormFile? formFile)
         {
             throw new NotImplementedException();
@@ -187,7 +190,7 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
                 data.Successfull = true;
                 data.Data = instrument;
             }
-            catch(NullReferenceException ex)
+            catch (NullReferenceException ex)
             {
                 data.Successfull = false;
                 data.ErrorMessage = ex.Message;
@@ -201,20 +204,20 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
             var data = new ResponseData<ListModel<MusicalInstrument>>();
             try
             {
-                    var filtered = _instruments.Where(i => categoryNormalizedName == null ? true : i.Category.NormalizedName == categoryNormalizedName);
+                var filtered = _instruments.Where(i => categoryNormalizedName == null ? true : i.Category.NormalizedName == categoryNormalizedName);
                 this._filtered = filtered.ToList();
-                    if(pageNo <=0) { pageNo = 1; }    
-                    var pcount = Math.Min(PageCount,pageNo);
-                    var pagination = filtered.Skip((pcount - 1) * pageSize).Take(pageSize);
-                    var list = new ListModel<MusicalInstrument>()
-                    {
-                        Items = pagination.ToList(),
-                        CurrentPage = pageNo,
-                        TotalPages = PageCount
-                    };
-                    data.Successfull = true;
-                    data.Data = list;
-                }
+                if (pageNo <= 0) { pageNo = 1; }
+                var pcount = Math.Min(PageCount, pageNo);
+                var pagination = filtered.Skip((pcount - 1) * pageSize).Take(pageSize);
+                var list = new ListModel<MusicalInstrument>()
+                {
+                    Items = pagination.ToList(),
+                    CurrentPage = pageNo,
+                    TotalPages = PageCount
+                };
+                data.Successfull = true;
+                data.Data = list;
+            }
             catch (Exception ex)
             {
                 data.Successfull = false;

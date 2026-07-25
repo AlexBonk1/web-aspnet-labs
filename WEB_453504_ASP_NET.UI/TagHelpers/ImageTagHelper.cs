@@ -21,7 +21,7 @@ namespace WEB_453504_ASP_NET.UI.TagHelpers
             {
                 if (string.IsNullOrWhiteSpace(AspImageName))
                 {
-                    AspImageName = "no-image.jpg"; 
+                    AspImageName = "no-image.jpg";
                 }
 
                 string physicalPath = Path.Combine(_env.WebRootPath, AspImageFolder, AspImageName);

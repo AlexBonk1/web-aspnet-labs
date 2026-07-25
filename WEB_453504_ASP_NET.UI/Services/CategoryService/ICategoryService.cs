@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WEB_453504_ASP_NET.Domain.Entities;
+﻿using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.Domain.Models;
 
-namespace WEB_453504_ASP_NET.Domain.Services.CategoryService
+namespace WEB_453504_ASP_NET.UI.Services.CategoryService
 {
     public interface ICategoryService
     {

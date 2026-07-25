@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
+﻿using Microsoft.AspNetCore.Mvc;
 using WEB_453504_ASP_NET.UI.Models;
 
 namespace WEB_453504_ASP_NET.UI.ViewComponents

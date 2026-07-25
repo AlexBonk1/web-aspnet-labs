@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WEB_453504_ASP_NET.Domain.Services.CategoryService;
-using WEB_453504_ASP_NET.Domain.Services.InstrumentService;
-using WEB_453504_ASP_NET.UI.Models;
+using WEB_453504_ASP_NET.Domain.Models;
+using WEB_453504_ASP_NET.UI.Services.CategoryService;
+using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
 namespace WEB_453504_ASP_NET.UI.Controllers
 {
@@ -9,9 +9,7 @@ namespace WEB_453504_ASP_NET.UI.Controllers
     {
         public async Task<IActionResult> Index(string? category, int pageNo = 1)
         {
-           
-            
-            var productResponse = await _service.GetInstrumentListAsync(category,pageNo);
+            var productResponse = await _service.GetInstrumentListAsync(category, pageNo);
             var resp = await categoryService.GetCategoryListAsync();
             if (!productResponse.Successfull)
                 return NotFound(productResponse.ErrorMessage);

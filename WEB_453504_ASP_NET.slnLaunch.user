@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Development",
+    "Projects": [
+      {
+        "Path": "WEB_453504_ASP_NET.UI\\WEB_453504_ASP_NET.UI.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "WEB_453504_ASP_NET.API\\WEB_453504_ASP_NET.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

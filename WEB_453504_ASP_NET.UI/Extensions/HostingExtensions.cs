@@ -1,6 +1,4 @@
-﻿using WEB_453504_ASP_NET.Domain.Services.CategoryService;
-using WEB_453504_ASP_NET.Domain.Services.InstrumentService;
-using WEB_453504_ASP_NET.UI.Services.CategoryService;
+﻿using WEB_453504_ASP_NET.UI.Services.CategoryService;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
 namespace WEB_453504_ASP_NET.UI.Extensions
