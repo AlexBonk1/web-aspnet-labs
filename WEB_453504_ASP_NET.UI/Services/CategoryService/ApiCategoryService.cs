@@ -22,9 +22,19 @@ namespace WEB_453504_ASP_NET.UI.Services.CategoryService
             _logger = logger;
         }
 
-        public Task<ResponseData<List<Category>>> GetCategoryListAsync()
+        public async Task<ResponseData<List<Category>>> GetCategoryListAsync()
         {
-            throw new NotImplementedException();
+            var responseData = new ResponseData<List<Category>>();
+
+            var response = await _httpClient.GetAsync(_httpClient.BaseAddress);
+            if (response.IsSuccessStatusCode)
+            {
+                responseData = await response.Content.ReadFromJsonAsync<ResponseData<List<Category>>>(_serializerOptions);
+                return responseData;
+            }
+            _logger.LogError($"-----> object not created. Error:{response.StatusCode.ToString()}");
+            return ResponseData<List<Category>>.Error($"Cannot get category list. Error:{response.StatusCode.ToString()}");
         }
+
     }
 }

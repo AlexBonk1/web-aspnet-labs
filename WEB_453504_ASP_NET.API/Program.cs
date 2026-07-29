@@ -32,6 +32,5 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.MapMusicalInstrumentEndpoints();
-app.MapInstrumentsWithPaginationEndpoints();
 
 app.Run();

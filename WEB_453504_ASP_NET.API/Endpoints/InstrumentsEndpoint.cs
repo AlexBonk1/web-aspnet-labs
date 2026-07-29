@@ -17,13 +17,13 @@ public static class InstrumentsEndpoint
         group.MapGet("/{category?}", async (IMediator mediator, string? category, int pageNo = 1) =>
         {
 
-            var data = mediator.Send(new GetListOfInstruments(category, pageNo));
+            var data = await mediator.Send(new GetListOfInstruments(category, pageNo));
             return Results.Ok(data);
 
         })
         .WithName("GetAllMusicalInstruments");
 
-        group.MapGet("/{id:required}", async Task<Results<Ok<MusicalInstrument>, NotFound>> (int id, AppDbContext db) =>
+        group.MapGet("/{id:int}", async Task<Results<Ok<MusicalInstrument>, NotFound>> (int id, AppDbContext db) =>
         {
             return await db.MusicalInstruments.AsNoTracking()
                 .FirstOrDefaultAsync(model => model.Id == id)

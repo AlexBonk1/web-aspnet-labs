@@ -66,7 +66,7 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
             }
             if (pageNo > 1)
             {
-                urlString.Append($"page{pageNo}");
+                urlString.Append(QueryString.Create("pageNo", pageNo.ToString()));
             }
             ;
             // добавить размер страницы в строку запроса

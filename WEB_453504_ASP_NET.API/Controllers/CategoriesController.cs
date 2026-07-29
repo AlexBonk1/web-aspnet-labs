@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WEB_453504_ASP_NET.API.Data;
 using WEB_453504_ASP_NET.Domain.Entities;
+using WEB_453504_ASP_NET.Domain.Models;
 
 namespace WEB_453504_ASP_NET.API.Controllers
 {
@@ -23,9 +24,21 @@ namespace WEB_453504_ASP_NET.API.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var result = new ResponseData<List<Category>>();
+            try
+            {
+                var categories = await _context.Categories.ToListAsync();
+                result.Data = categories;
+                result.Successfull = true;
+            }
+            catch(Exception ex)
+            {
+                result.Successfull = false;
+                result.ErrorMessage = ex.Message;
+            }
+            return Ok(result);
         }
 
         // GET: api/Categories/5
