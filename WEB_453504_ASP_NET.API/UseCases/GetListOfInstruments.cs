@@ -33,7 +33,7 @@ namespace WEB_453504_ASP_NET.API.UseCases
             try
             {
 
-                var filtered = db.MusicalInstruments.Where(i => request.categoryNormalizedName == null || i.Category.NormalizedName == request.categoryNormalizedName);
+                var filtered = db.MusicalInstruments.Where(i => request.categoryNormalizedName == null || i.Category.NormalizedName == request.categoryNormalizedName).OrderBy(i => i.Id);
                 _filteredCount = filtered.Count();
                 _pageSize = request.pageSize;
                 var pcount = Math.Min(PageCount, pageNo);

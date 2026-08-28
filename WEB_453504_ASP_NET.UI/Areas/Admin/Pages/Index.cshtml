@@ -1,6 +1,100 @@
-﻿@page
+@page
+@model WEB_453504_ASP_NET.UI.Areas_Admin_Pages.IndexModel
+
+
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Админка";
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+    var CurrentPage = ViewBag.PageNo;
+    var TotalPages = ViewBag.TotalPages;
+    int prev = CurrentPage == 1 ? 1 : CurrentPage - 1;
+    int next = CurrentPage == ViewBag.TotalPages ? ViewBag.TotalPages : CurrentPage + 1;
 }
-<h1>Admin panel!</h1>
+
+<h1>Index</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="Create" role="button">
+        <i class="bi-plus-circle" ></i>
+        Create New
+    </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].ImageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MusicalInstrument[0].WeightKg)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MusicalInstrument) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <img asp-image-name="@item.ImageUrl" onerror="this.onerror=null; this.src='/images/no-image.jpg';" width="150" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeightKg)
+            </td>
+            <td>
+                <a class="btn btn-secondary" asp-page="./Edit" asp-route-id="@item.Id" role="button">
+                    <i class="bi bi-pencil"></i>
+                    Edit
+                    </a>
+
+                    <a class="btn btn-secondary" asp-page="./Details" asp-route-id="@item.Id" role="button">
+                        <i class="bi bi-info"></i>
+                        Details
+                    </a>
+                    <a class="btn btn-secondary" asp-page="./Delete" asp-route-id="@item.Id" role="button">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" aria-label="Previous" width="45px"  asp-route-pageNo=@prev>
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" width="45px" asp-route-pageNo=@prev>@(prev == CurrentPage ? "\u00A0" : prev)</a></li>
+        <li class="page-item "><a class="page-link active" width="45px">@CurrentPage</a></li>
+        <li class="page-item"><a class="page-link" width="45px" asp-route-pageNo=@next aria-label="Next">@(next == CurrentPage ? "\u00A0" : next)</a></li>
+        <a class="page-link" width="45px"  asp-route-pageNo=@next aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </ul>
+</nav>

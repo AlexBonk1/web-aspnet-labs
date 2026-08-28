@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseHttpsRedirection();
 
 app.MapMusicalInstrumentEndpoints();

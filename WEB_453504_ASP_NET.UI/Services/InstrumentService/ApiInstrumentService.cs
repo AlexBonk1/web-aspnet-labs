@@ -1,4 +1,5 @@
-﻿
+
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text;
 using System.Text.Json;
 using WEB_453504_ASP_NET.Domain.Entities;
@@ -26,34 +27,84 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
             };
             _logger = logger;
         }
+
         public async Task<ResponseData<MusicalInstrument>> CreateInstrumentAsync(MusicalInstrument instrument, IFormFile? formFile)
         {
-            instrument.ImageUrl = "Images/no-image.jpg";
+            instrument.ImageUrl = "images/no-image.jpg";
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = _httpClient.BaseAddress
             };
-            request.Content = new StringContent(JsonSerializer.Serialize(instrument));
+            var content = new MultipartFormDataContent();
+            // Добавить файл изображения
+            if (formFile != null)
+            {
+                var streamContent = new StreamContent(formFile.OpenReadStream());
+                content.Add(streamContent, "file", formFile.FileName);
+            }
+            content.Add(new StringContent(instrument.Name), "name");
+            content.Add(new StringContent(instrument.Description), "description");
+            content.Add(new StringContent(instrument.CategoryId.ToString()), "categoryId");
+            content.Add(new StringContent(instrument.Price.ToString()), "price");
+            content.Add(new StringContent(instrument.WeightKg.ToString()), "weightKg");
+            if (formFile != null)
+            {
+                var fileContent = new StreamContent(formFile.OpenReadStream());
+                content.Add(fileContent, "file", formFile.FileName);
+            }
+            request.Content = content;
             var response = await _httpClient.SendAsync(request,CancellationToken.None);
             if (response.IsSuccessStatusCode)
             {
-           
-            var responseData = await response.Content.ReadFromJsonAsync<ResponseData<MusicalInstrument>> (_serializerOptions);
-            return responseData;
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<MusicalInstrument>>(_serializerOptions);
+                return responseData ?? ResponseData<MusicalInstrument>.Error("Пустой ответ от API.");
             }
             _logger.LogError($"-----> object not created. Error:{response.StatusCode.ToString()}");
             return ResponseData<MusicalInstrument>.Error($"Объект не добавлен. Error:{response.StatusCode.ToString()}");
-    }
-
-        public Task DeleteInstrumentAsync(int id)
-        {
-            throw new NotImplementedException();
         }
 
-        public Task<ResponseData<MusicalInstrument>> GetInstrumentByIdAsync(int id)
+        public async Task DeleteInstrumentAsync(int id)
         {
-            throw new NotImplementedException();
+            var urlString = $"{_httpClient.BaseAddress}{id}";
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(urlString)
+            };
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation($"----> object {id} update succesfully");
+                return;
+            }
+            _logger.LogError($"-----> object not deleted. Error:{response.StatusCode.ToString()}");
+        }
+
+        public async Task<ResponseData<MusicalInstrument>> GetInstrumentByIdAsync(int id)
+        {
+            var urlString = $"{_httpClient.BaseAddress}{id}";
+            var response = await _httpClient.GetAsync(urlString);
+            var respData = new ResponseData<MusicalInstrument>();
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    respData.Successfull = true;
+                    var result =  await response.Content.ReadFromJsonAsync<MusicalInstrument>(_serializerOptions);
+                    respData.Data = result;
+                    return respData;
+                }
+                catch (JsonException ex)
+                {
+                    respData.Successfull = false;
+                    respData.ErrorMessage = ex.Message;
+                    _logger.LogError($"-----> Ошибка: {ex.Message}");
+                    return ResponseData<MusicalInstrument>.Error($"Ошибка: {ex.Message}");
+                }
+            }
+            _logger.LogError($"-----> Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
+            return ResponseData<MusicalInstrument>.Error($"Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
         }
 
         public async Task<ResponseData<ListModel<MusicalInstrument>>> GetInstrumentListAsync(string? categoryNormalizedName, int pageNo = 1)
@@ -93,9 +144,37 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
             _logger.LogError($"-----> Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
             return ResponseData<ListModel<MusicalInstrument>>.Error($"Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
         }
-        public Task UpdateInstrumentAsync(int id, MusicalInstrument instrument, IFormFile? formFile)
+        public async Task UpdateInstrumentAsync(int id, MusicalInstrument instrument, IFormFile? formFile)
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"{ _httpClient.BaseAddress}{id}")
+            };
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(instrument.Name), "name");
+            content.Add(new StringContent(instrument.Description), "description");
+            content.Add(new StringContent(instrument.CategoryId.ToString()), "categoryId");
+            content.Add(new StringContent(instrument.Price.ToString()), "price");
+            content.Add(new StringContent(instrument.WeightKg.ToString()), "weightKg");
+
+            if (formFile != null)
+            {
+                var fileContent = new StreamContent(formFile.OpenReadStream());
+                content.Add(fileContent, "file", formFile.FileName);
+            }
+
+            request.Content = content;
+            var response = await _httpClient.SendAsync(request);
+
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation($"----> object {id} update succesfully");
+                return;
+            }
+            _logger.LogError($"-----> object not created. Error:{response.StatusCode.ToString()}");
+            return;
         }
     }
 }

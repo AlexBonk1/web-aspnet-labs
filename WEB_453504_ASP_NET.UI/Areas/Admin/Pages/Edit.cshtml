@@ -1,0 +1,57 @@
+@page
+@model WEB_453504_ASP_NET.UI.Areas_Admin_Pages.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MusicalInstrument</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MusicalInstrument.Id" />
+            <div class="form-group">
+                <label asp-for="MusicalInstrument.Name" class="control-label"></label>
+                <input asp-for="MusicalInstrument.Name" class="form-control" />
+                <span asp-validation-for="MusicalInstrument.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MusicalInstrument.Description" class="control-label"></label>
+                <input asp-for="MusicalInstrument.Description" class="form-control" />
+                <span asp-validation-for="MusicalInstrument.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MusicalInstrument.CategoryId" class="control-label"></label>
+                <select asp-for="MusicalInstrument.CategoryId" class="form-control" asp-items="ViewBag.CategoryId" ></select>
+                <span asp-validation-for="MusicalInstrument.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label">Image</label>
+                <input asp-for="Image" type="file" accept="image/*" class="form-control" />
+                <img asp-image-name="@Model.MusicalInstrument.ImageUrl" onerror="this.onerror=null; this.src='/images/no-image.jpg';" width="400" />
+            </div>
+            <div class="form-group">
+                <label asp-for="MusicalInstrument.Price" class="control-label"></label>
+                <input asp-for="MusicalInstrument.Price" class="form-control" />
+                <span asp-validation-for="MusicalInstrument.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MusicalInstrument.WeightKg" class="control-label"></label>
+                <input asp-for="MusicalInstrument.WeightKg" class="form-control" />
+                <span asp-validation-for="MusicalInstrument.WeightKg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+

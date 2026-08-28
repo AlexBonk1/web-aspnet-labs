@@ -9,13 +9,14 @@ namespace WEB_453504_ASP_NET.UI.TagHelpers
         public class ImagePathTagHelper : TagHelper
         {
             private readonly IWebHostEnvironment _env;
-            public ImagePathTagHelper(IWebHostEnvironment env)
+            private readonly IConfiguration _configuration;
+            public ImagePathTagHelper(IWebHostEnvironment env, IConfiguration configuration)
             {
                 _env = env;
+                _configuration = configuration;
             }
             public string AspImageName { get; set; }
 
-            public string AspImageFolder { get; } = "images";
 
             public override void Process(TagHelperContext context, TagHelperOutput output)
             {
@@ -23,17 +24,10 @@ namespace WEB_453504_ASP_NET.UI.TagHelpers
                 {
                     AspImageName = "no-image.jpg";
                 }
-
-                string physicalPath = Path.Combine(_env.WebRootPath, AspImageFolder, AspImageName);
-
-                if (!File.Exists(physicalPath))
-                {
-                    AspImageName = "no-image.jpg";
-                }
-
-                string relativePath = $"/{AspImageFolder}/{AspImageName}";
-
-                output.Attributes.SetAttribute("src", relativePath);
+                
+                var physicalPath = Path.Combine(_configuration["ApiHost"], AspImageName);
+                
+                output.Attributes.SetAttribute("src", physicalPath);
 
                 output.Attributes.RemoveAll("asp-image-name");
                 output.Attributes.RemoveAll("asp-image-folder");

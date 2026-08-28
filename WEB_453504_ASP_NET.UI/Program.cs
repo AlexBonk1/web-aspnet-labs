@@ -12,6 +12,7 @@ builder.Services.AddRazorPages();
 
 var uriData = builder.Configuration.GetSection("UriData").Get<UriData>();
 
+
 //builder.RegisterCustomServices();
 builder.Services.AddHttpClient<IInstrumentService, ApiInstrumentService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/instruments/"));
 builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/categories/"));
