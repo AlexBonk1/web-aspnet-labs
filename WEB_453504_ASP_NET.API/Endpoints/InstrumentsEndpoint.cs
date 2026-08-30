@@ -26,14 +26,16 @@ public static class InstrumentsEndpoint
     {
         var group = routes.MapGroup("/api/instruments")
             .WithTags(nameof(MusicalInstrument))
-            .DisableAntiforgery();
+            .DisableAntiforgery()
+            .RequireAuthorization("admin");
 
         group.MapGet("/", async (IMediator mediator, [FromQuery] string? category, int pageNo = 1) =>
         {
             var data = await mediator.Send(new GetListOfInstruments(category, pageNo));
             return Results.Ok(data);
         })
-        .WithName("GetAllMusicalInstruments");
+        .WithName("GetAllMusicalInstruments")
+        .AllowAnonymous();
 
 
         group.MapGet("/{id:int}", async Task<Results<Ok<MusicalInstrument>, NotFound>> (int id, AppDbContext db) =>
@@ -44,7 +46,8 @@ public static class InstrumentsEndpoint
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
         })
-        .WithName("GetMusicalInstrumentById");
+        .WithName("GetMusicalInstrumentById")
+        .AllowAnonymous();
 
         group.MapPut("/{id}", async Task<Results<Ok<ResponseData<MusicalInstrument>>, NotFound, BadRequest<string>>> (
             int id, 

@@ -1,5 +1,6 @@
 using WEB_453504_ASP_NET.UI;
-using WEB_453504_ASP_NET.UI.Extensions;
+using WEB_453504_ASP_NET.UI.Services;
+using WEB_453504_ASP_NET.UI.Services.Authentification;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+
+
 
 var uriData = builder.Configuration.GetSection("UriData").Get<UriData>();
 
@@ -17,10 +19,21 @@ var uriData = builder.Configuration.GetSection("UriData").Get<UriData>();
 builder.Services.AddHttpClient<IInstrumentService, ApiInstrumentService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/instruments/"));
 builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/categories/"));
 
+builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
+
+builder.Services.AddCookiesAuthentication(builder.Configuration);
+
+builder.Services.AddAuthorization(opt =>
+opt.AddPolicy("admin", p => p.RequireRole("POWER-USER")));
+
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeAreaFolder("Admin", "/", "admin");
+});
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
-
-
 
 
 
@@ -38,7 +51,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization("admin");
 app.MapStaticAssets();
 
 app.MapControllerRoute(

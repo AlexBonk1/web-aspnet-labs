@@ -10,9 +10,12 @@ namespace WEB_453504_ASP_NET.UI.Services.CategoryService
         HttpClient _httpClient;
         JsonSerializerOptions _serializerOptions;
         ILogger<ApiCategoryService> _logger;
+
+        ITokenAccessor _tokenAccessor;
         public ApiCategoryService(HttpClient httpClient,
                                       IConfiguration configuration,
-                                      ILogger<ApiCategoryService> logger)
+                                      ILogger<ApiCategoryService> logger,
+                                      ITokenAccessor tokenAccessor)
         {
             _httpClient = httpClient;
             _serializerOptions = new JsonSerializerOptions()
@@ -20,6 +23,7 @@ namespace WEB_453504_ASP_NET.UI.Services.CategoryService
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             _logger = logger;
+            _tokenAccessor = tokenAccessor;
         }
 
         public async Task<ResponseData<List<Category>>> GetCategoryListAsync()

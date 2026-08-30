@@ -6,6 +6,7 @@ using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.Domain.Models;
 using WEB_453504_ASP_NET.UI.Controllers;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
+using WEB_453504_ASP_NET.UI.Services.Authentification;
 
 namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
 {
@@ -15,9 +16,12 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
         JsonSerializerOptions _serializerOptions;
         string _pageSize;
         ILogger<ApiInstrumentService> _logger;
+        ITokenAccessor _tokenAccessor;
+        
         public ApiInstrumentService(HttpClient httpClient,
                                       IConfiguration configuration,
-                                      ILogger<ApiInstrumentService> logger)
+                                      ILogger<ApiInstrumentService> logger,
+                                      ITokenAccessor tokenAccessor)
         {
             _httpClient = httpClient;
             _pageSize = configuration.GetSection("ItemsPerPage").Value;
@@ -26,10 +30,21 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             _logger = logger;
+            _tokenAccessor = tokenAccessor;
         }
 
         public async Task<ResponseData<MusicalInstrument>> CreateInstrumentAsync(MusicalInstrument instrument, IFormFile? formFile)
         {
+            try
+            {
+                await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+            }
+            catch (Exception e)
+            {
+                return ResponseData<MusicalInstrument>
+                    .Error($"Объект не добавлен. Error: {e.Message}");
+            }
+
             instrument.ImageUrl = "images/no-image.jpg";
             var request = new HttpRequestMessage
             {
@@ -66,6 +81,16 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
 
         public async Task DeleteInstrumentAsync(int id)
         {
+            try
+            {
+                await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"-----> object not deleted. Error: {e.Message}");
+                return;
+            }
+
             var urlString = $"{_httpClient.BaseAddress}{id}";
             var request = new HttpRequestMessage
             {
@@ -146,6 +171,16 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
         }
         public async Task UpdateInstrumentAsync(int id, MusicalInstrument instrument, IFormFile? formFile)
         {
+            try
+            {
+                await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"-----> object not updated. Error: {e.Message}");
+                return;
+            }
+
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Put,

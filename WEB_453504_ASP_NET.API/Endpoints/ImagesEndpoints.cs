@@ -24,7 +24,8 @@ namespace WEB_453504_ASP_NET.API.Endpoints
                 var bytes = await File.ReadAllBytesAsync(imagePath);
                 return Results.File(bytes, contentType);
             })
-            .WithName("GetImage");
+            .WithName("GetImage")
+            .AllowAnonymous();
 
         }
 
