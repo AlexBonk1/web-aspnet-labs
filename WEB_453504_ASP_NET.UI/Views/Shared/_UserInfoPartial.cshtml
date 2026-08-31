@@ -9,7 +9,7 @@
     .Claims
     .FirstOrDefault(c => c.Type.Equals("avatar",
     StringComparison.OrdinalIgnoreCase))?
-    .Value ?? "/images/default-profile-picture.png";
+    .Value ?? "/images/avatars/default-profile-picture.png";
 }
 
 @if(User.Identity.IsAuthenticated)

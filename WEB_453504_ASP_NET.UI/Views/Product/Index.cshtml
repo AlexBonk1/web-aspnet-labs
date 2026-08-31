@@ -3,14 +3,7 @@
 
 
 @{
-    var instruments = Model.instruments;
     var categories = Model.categories;
-    var request = ViewContext.HttpContext.Request;
-    var returnUrl = request.Path + request.QueryString.ToUriComponent();
-    var CurrentPage = Model.CurrentPage;
-    int prev =CurrentPage == 1 ? 1 : CurrentPage - 1;
-    int next = CurrentPage  == Model.TotalPages ? Model.TotalPages : CurrentPage + 1;
-    var category = request.Query["category"].ToString();
 }
 
 <!DOCTYPE html>
@@ -21,9 +14,6 @@
     <title>Index</title>
 </head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @ViewData["currentCategory"]
@@ -43,40 +33,7 @@
             }
         </ul>
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var cart in instruments) { 
-            <div class="col">
-            <div class="card">
-                    <div class="ratio ratio-1x1 bg-light rounded-top">
-                        <img asp-image-name=@cart.ImageUrl alt="no_image"/>
-                    </div>
-                <div class="card-body">
-                    <h5 class="card-title">@cart.Name</h5>
-                    <p class="card-text">@cart.Description</p>
-                    <p>@cart.Price</p>
-                  <p>@cart.WeightKg Kg</p>
-                        <button type="button" class="btn btn-outline-primary text-black">
-                            <a class="bi-cart" asp-controller="Product" asp-action="add" asp-route-id="@cart.Id" asp-route-returnUrl="@returnUrl">Добавить в корзину</a>
-                        </button>
-                </div>
-              </div>
-              </div>
-        }
-    </div>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" aria-label="Previous" width="45px" asp-controller="Product" asp-route-pageNo=@prev asp-route-category="@category">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" width="45px" asp-controller="Product" asp-route-pageNo=@prev asp-route-category="@category">@(prev == CurrentPage ? "\u00A0" : prev)</a></li>
-            <li class="page-item "><a class="page-link active" width="45px">@CurrentPage</a></li>
-            <li class="page-item"><a class="page-link" width="45px" asp-controller="Product" asp-route-pageNo=@next aria-label="Next" asp-route-category="@category">@(next == CurrentPage ? "\u00A0" : next)</a></li>
-            <a class="page-link" width="45px" asp-controller="Product" asp-route-pageNo=@next aria-label="Next" asp-route-category="@category">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-        </ul>
-    </nav>
+   <partial name="_ProductPagePartial" />
+
 </body>
 </html>

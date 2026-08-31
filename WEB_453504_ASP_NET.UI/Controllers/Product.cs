@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEB_453504_ASP_NET.Domain.Models;
+using WEB_453504_ASP_NET.UI.Extensions;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
@@ -35,6 +36,10 @@ namespace WEB_453504_ASP_NET.UI.Controllers
                 TotalPages = productResponse.Data.TotalPages,
                 CurrentPage = productResponse.Data.CurrentPage
             };
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_ProductListPartial", vm);
+
             return View(vm);
         }
     }

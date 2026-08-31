@@ -136,20 +136,23 @@ namespace WEB_453504_ASP_NET.UI.Services.InstrumentService
         {
             var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}");
             // добавить категорию в маршрут
+            var query = QueryString.Empty;
             if (categoryNormalizedName != null)
             {
-                urlString.Append($"{categoryNormalizedName}/");
+                query = query.Add(QueryString.Create("category", categoryNormalizedName));
             }
+
             if (pageNo > 1)
             {
-                urlString.Append(QueryString.Create("pageNo", pageNo.ToString()));
+                query = query.Add(QueryString.Create("pageNo", pageNo.ToString()));
             }
-            ;
-            // добавить размер страницы в строку запроса
+
             if (!_pageSize.Equals("3"))
             {
-                urlString.Append(QueryString.Create("pageSize", _pageSize));
+                query = query.Add(QueryString.Create("pageSize", _pageSize));
             }
+            urlString.Append(query);
+            _logger.LogInformation($"-----> Запрос к API: {urlString.ToString()}");
             // отправить запрос к API
             var response = await _httpClient.GetAsync(
             new Uri(urlString.ToString()));

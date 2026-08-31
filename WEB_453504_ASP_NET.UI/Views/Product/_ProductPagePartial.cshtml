@@ -1,0 +1,33 @@
+@{
+
+    var instruments = Model.instruments;
+    var request = ViewContext.HttpContext.Request;
+    var CurrentPage = Model.CurrentPage;
+    var category = request.Query["category"].ToString();
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+
+}
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var cart in instruments) { 
+            <div class="col">
+            <div class="card">
+                    <div class="ratio ratio-1x1 bg-light rounded-top">
+                        <img asp-image-name=@cart.ImageUrl alt="no_image"/>
+                    </div>
+                <div class="card-body">
+                    <h5 class="card-title">@cart.Name</h5>
+                    <p class="card-text">@cart.Description</p>
+                    <p>@cart.Price</p>
+                  <p>@cart.WeightKg Kg</p>
+                        <button type="button" class="btn btn-outline-primary text-black">
+                            <a class="bi-cart" asp-controller="Product" asp-action="add" asp-route-id="@cart.Id" asp-route-returnUrl="@returnUrl">Добавить в корзину</a>
+                        </button>
+                </div>
+              </div>
+              </div>
+        }
+    </div>
+
+    <Pager current-page="@CurrentPage" total-pages="@Model.TotalPages" is-admin="false" category="@category"></Pager>

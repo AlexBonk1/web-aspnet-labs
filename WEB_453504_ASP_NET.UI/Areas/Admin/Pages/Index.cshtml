@@ -83,18 +83,4 @@
 }
     </tbody>
 </table>
-<nav>
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" aria-label="Previous" width="45px"  asp-route-pageNo=@prev>
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li class="page-item"><a class="page-link" width="45px" asp-route-pageNo=@prev>@(prev == CurrentPage ? "\u00A0" : prev)</a></li>
-        <li class="page-item "><a class="page-link active" width="45px">@CurrentPage</a></li>
-        <li class="page-item"><a class="page-link" width="45px" asp-route-pageNo=@next aria-label="Next">@(next == CurrentPage ? "\u00A0" : next)</a></li>
-        <a class="page-link" width="45px"  asp-route-pageNo=@next aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
-    </ul>
-</nav>
+<Pager action="Index" current-page="@CurrentPage" total-pages="@TotalPages" is-admin="true"></Pager>
