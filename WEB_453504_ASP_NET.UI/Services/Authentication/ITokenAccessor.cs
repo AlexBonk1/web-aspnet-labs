@@ -1,4 +1,4 @@
-namespace WEB_453504_ASP_NET.UI.Services;
+namespace WEB_453504_ASP_NET.UI.Services.Authentification;
 public interface ITokenAccessor
 {
 /// <summary>

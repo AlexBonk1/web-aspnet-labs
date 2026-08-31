@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.Domain.Models;
+using WEB_453504_ASP_NET.UI.Services.Authentification;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
 namespace WEB_453504_ASP_NET.UI.Services.CategoryService

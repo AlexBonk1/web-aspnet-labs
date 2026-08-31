@@ -1,7 +1,9 @@
 using WEB_453504_ASP_NET.UI;
+using WEB_453504_ASP_NET.UI.Models;
 using WEB_453504_ASP_NET.UI.Services;
 using WEB_453504_ASP_NET.UI.Services.Authentification;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
+using WEB_453504_ASP_NET.UI.Services.FileSevice;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
 
@@ -13,13 +15,14 @@ builder.Services.AddControllersWithViews();
 
 
 var uriData = builder.Configuration.GetSection("UriData").Get<UriData>();
-
+builder.Services.Configure<KeycloakData>(builder.Configuration.GetSection("Keycloak"));
 
 //builder.RegisterCustomServices();
 builder.Services.AddHttpClient<IInstrumentService, ApiInstrumentService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/instruments/"));
 builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => opt.BaseAddress = new Uri($"{uriData.ApiUri}/categories/"));
 
 builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
+builder.Services.AddScoped<IFileService, LocalFileService>();
 
 builder.Services.AddCookiesAuthentication(builder.Configuration);
 

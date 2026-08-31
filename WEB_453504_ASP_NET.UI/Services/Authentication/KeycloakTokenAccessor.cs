@@ -9,13 +9,15 @@ namespace WEB_453504_ASP_NET.UI.Services.Authentification
     public class KeycloakTokenAccessor(
         IHttpContextAccessor contextAccessor,
         IOptions<KeycloakData> options,
-        HttpClient httpClient) : ITokenAccessor
+        HttpClient httpClient,
+        ILogger<KeycloakTokenAccessor> logger) : ITokenAccessor
     {
         public async Task SetAuthorizationHeaderAsync(HttpClient httpClient, bool isClient)
         {
             string token = isClient
                 ? await GetClientToken()
                 : await GetUserToken();
+            logger.LogInformation($"-----> Token: {token}");
             httpClient
                 .DefaultRequestHeaders
                 .Authorization = new AuthenticationHeaderValue("bearer", token);
