@@ -44,6 +44,14 @@ builder.Services.AddAuthorization(opt =>
     opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
 });
 
+builder.Services.AddHybridCache();
+builder.Services.AddStackExchangeRedisCache(opt =>
+{
+    opt.InstanceName = "labs_";
+    opt.Configuration = builder
+    .Configuration
+    .GetConnectionString("Redis");
+});
 
 var app = builder.Build();
 await DbInitializer.SeedData(app);
@@ -63,6 +71,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseCors("AllowKeycloak");
 
 app.MapControllers();

@@ -1,0 +1,44 @@
+@model Cart
+
+@{
+    ViewData["Title"] = "Index";
+    var curUrl = "Cart/Index";
+}
+
+<h1>Корзина заказов</h1>
+
+<table class="table">
+    <tbody>
+@foreach (var item in Model.CartItems.Values) {
+        <tr>
+            <td>
+                <img asp-image-name="@item.Product.ImageUrl" onerror="this.onerror=null; this.src='/images/no-image.jpg';" width="150" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary">-</button>
+            </td>
+            <td>
+                <form asp-controller="Cart" asp-action="Add" asp-route-id="@item.Product.Id" method="post" class="m-0 p-0" asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)">
+                    <button type="submit" class="btn btn-danger">Add</button>
+                </form>
+            </td>
+            <td>
+               <form asp-controller="Cart" asp-action="Delete" asp-route-id="@item.Product.Id" method="post" class="m-0 p-0" asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>     
+        </tr>
+}
+    </tbody>
+    <p> Общая стоимость: @Model.TotalPrice </p>
+    <p> Общее количество: @Model.Count</p>
+</table>

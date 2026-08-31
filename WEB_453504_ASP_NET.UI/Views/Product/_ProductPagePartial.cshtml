@@ -8,7 +8,6 @@
 
 }
 
-
 <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var cart in instruments) { 
             <div class="col">
@@ -22,7 +21,7 @@
                     <p>@cart.Price</p>
                   <p>@cart.WeightKg Kg</p>
                         <button type="button" class="btn btn-outline-primary text-black">
-                            <a class="bi-cart" asp-controller="Product" asp-action="add" asp-route-id="@cart.Id" asp-route-returnUrl="@returnUrl">Добавить в корзину</a>
+                            <a class="bi-cart" asp-controller="Cart" asp-action="add" asp-route-id="@cart.Id" asp-route-returnUrl="@returnUrl">Добавить в корзину</a>
                         </button>
                 </div>
               </div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using WEB_453504_ASP_NET.API.Data;
 using WEB_453504_ASP_NET.API.UseCases;
 using WEB_453504_ASP_NET.Domain.Entities;
@@ -29,9 +30,17 @@ public static class InstrumentsEndpoint
             .DisableAntiforgery()
             .RequireAuthorization("admin");
 
-        group.MapGet("/", async (IMediator mediator, [FromQuery] string? category, int pageNo = 1) =>
+        group.MapGet("/", async (IMediator mediator, HybridCache cache,  [FromQuery] string? category, int pageNo = 1) =>
         {
-            var data = await mediator.Send(new GetListOfInstruments(category, pageNo));
+            var data = await cache.GetOrCreateAsync($"dishes_{category}_{pageNo}",
+                                    async token => await mediator.Send(
+                                    new GetListOfInstruments(category, pageNo)),
+                                    options: new HybridCacheEntryOptions
+                                    {
+                                    Expiration=TimeSpan.FromMinutes(1),
+                                    LocalCacheExpiration = TimeSpan.FromSeconds(30)
+                                    }
+        );
             return Results.Ok(data);
         })
         .WithName("GetAllMusicalInstruments")

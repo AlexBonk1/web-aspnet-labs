@@ -6,6 +6,8 @@ using WEB_453504_ASP_NET.UI.Services.InstrumentService;
 
 namespace WEB_453504_ASP_NET.UI.Controllers
 {
+
+    [Route("Catalog")]
     public class Product(IInstrumentService _service, ICategoryService categoryService) : Controller
     {
         public async Task<IActionResult> Index(string? category, int pageNo = 1)

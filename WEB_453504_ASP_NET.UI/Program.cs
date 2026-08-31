@@ -1,3 +1,4 @@
+using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.UI;
 using WEB_453504_ASP_NET.UI.Models;
 using WEB_453504_ASP_NET.UI.Services;
@@ -5,7 +6,7 @@ using WEB_453504_ASP_NET.UI.Services.Authentification;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
 using WEB_453504_ASP_NET.UI.Services.FileSevice;
 using WEB_453504_ASP_NET.UI.Services.InstrumentService;
-
+using WEB_453504_ASP_NET.UI.Services.Cart;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => opt.
 
 builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
 builder.Services.AddScoped<IFileService, LocalFileService>();
-
+builder.Services.AddScoped<WEB_453504_ASP_NET.Domain.Entities.Cart, SessionCart>();
 builder.Services.AddCookiesAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorization(opt =>
@@ -35,7 +36,8 @@ builder.Services.AddRazorPages(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 var app = builder.Build();
 
 app.UseStaticFiles();
@@ -53,6 +55,9 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+app.UseSession();
 
 app.MapRazorPages().RequireAuthorization("admin");
 app.MapStaticAssets();
