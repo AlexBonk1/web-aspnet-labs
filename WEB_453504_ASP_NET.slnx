@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="WEB_453504_ASP_NET.Tests/WEB_453504_ASP_NET.Tests.csproj" Id="f0c1e3d5-4b8a-4f6e-9c7b-2f3e5d9c1a2b" />
   <Project Path="WEB_453504_ASP_NET.API/WEB_453504_ASP_NET.API.csproj" Id="0f72457e-ff30-421c-975c-a38fd50916cc" />
   <Project Path="WEB_453504_ASP_NET.Domain/WEB_453504_ASP_NET.Domain.csproj" Id="1397a7da-ca58-4d48-a73e-effd61f35f01" />
   <Project Path="WEB_453504_ASP_NET.UI/WEB_453504_ASP_NET.UI.csproj" />
