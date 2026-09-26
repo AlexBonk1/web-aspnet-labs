@@ -1,0 +1,61 @@
+﻿@page "/counter"
+@page "/counter/{initialCount:int}"
+@rendermode InteractiveServer
+
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<EditForm Model="@formData" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+        <InputNumber class="form-control" @bind-Value="formData.Count" />
+        <button type="submit" class="btn btn-primary">Установить</button>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int? InitialCount { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        ApplyInitialValue();
+    }
+    private void ApplyInitialValue()
+    {
+        if (InitialCount.HasValue)
+        {
+            currentCount = InitialCount.Value;
+        }
+    }
+    private int currentCount = 0;
+    private ButtonModel formData = new ButtonModel();
+    private string? successMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        successMessage = $"Значение {formData.Count} успешно установлено!";
+        currentCount = formData.Count ?? 0;
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        successMessage = null;
+    }
+
+    public class ButtonModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Поле обязательно")]
+        [System.ComponentModel.DataAnnotations.Range(1, 10, ErrorMessage = "Значение должно быть между 1 и 10")]
+        public int? Count { get; set; }
+    }
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
