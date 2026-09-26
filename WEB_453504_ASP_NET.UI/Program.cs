@@ -1,7 +1,5 @@
-using WEB_453504_ASP_NET.Domain.Entities;
 using WEB_453504_ASP_NET.UI;
 using WEB_453504_ASP_NET.UI.Models;
-using WEB_453504_ASP_NET.UI.Services;
 using WEB_453504_ASP_NET.UI.Services.Authentification;
 using WEB_453504_ASP_NET.UI.Services.CategoryService;
 using WEB_453504_ASP_NET.UI.Services.FileSevice;

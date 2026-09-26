@@ -1,0 +1,31 @@
+﻿@page "/items"
+@using WEB_453504_ASP_NET.BlazorWasm.Services
+@using WEB_453504_ASP_NET.Domain.Entities;
+@using static System.Net.WebRequestMethods
+@inject NavigationManager Navigation
+@inject IDataService DataService
+
+<QuickGrid Items="@instruments" Class="table table-striped">
+    <PropertyColumn Property="@(d => d.Name)" Title="Название" Sortable="true" />
+    <PropertyColumn Property="@(d => d.Description)" Title="Описание" />
+    <TemplateColumn Title="Действие">
+        <button class="btn btn-primary btn-sm" @onclick="">
+            Подробно
+        </button>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private IQueryable<MusicalInstrument> instruments = Enumerable.Empty<MusicalInstrument>().AsQueryable();
+     @* private NavigationManager Navigation { get; set; } = default!;  *@
+    protected override async Task OnInitializedAsync()
+    {
+        await DataService.GetInstrumentsListAsync();
+        instruments = DataService.Instruments.AsQueryable();
+    }
+
+    private void ShowDetails(int id) 
+    {
+        Navigation.NavigateTo($"/instrument/{id}");
+    }
+}
