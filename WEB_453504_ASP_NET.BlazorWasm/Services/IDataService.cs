@@ -22,8 +22,9 @@ Category SelectedCategory { get; set; }
 /// Получение списка всех объектов
 /// </summary>
 /// <param name="pageNo">номер страницы списка</param>
+/// <param name="categoryNormalizedName">нормализованное имя категории</param>
 /// <returns></returns>
-public Task GetInstrumentsListAsync(int pageNo = 1);
+public Task GetInstrumentsListAsync(int pageNo = 1, string? categoryNormalizedName = null);
 /// <summary>
 /// Получение списка категорий
 /// </summary>

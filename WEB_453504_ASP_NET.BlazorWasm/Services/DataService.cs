@@ -40,69 +40,83 @@ public class DataService : IDataService
         CurrentPage = 1;
     }
         public async Task GetCategoryListAsync()
-    {
-        var response = await _httpClient.GetAsync("api/categories");
-        if(!response.IsSuccessStatusCode)
         {
-            ErrorMessage = $"Ошибка при получении списка категорий: {response.ReasonPhrase}";
-            Success = false;
-            return;
-        }
-        var result = await response.Content.ReadFromJsonAsync<ResponseData<List<Category>>>();
-        if (result != null && result.Successfull)
-        {
-            Categories = result.Data ?? new();
-        }
-        else
-        {
-            Categories = new();
-        }
-    }
-
-                public async Task GetInstrumentsListAsync(int pageNo = 1)
-                {
-                    var tokenRequest = await _tokenProvider.RequestAccessToken();
-                    if (tokenRequest.TryGetToken(out var token))
-                    {
-                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                    }
-
-                    var route = new System.Text.StringBuilder("api/instruments?");
-                    List<KeyValuePair<string, string>> queryData = new();
-
-                    if (SelectedCategory is not null)
-                    {
-                        queryData.Add(KeyValuePair.Create("category", SelectedCategory.NormalizedName));
-                    }
-
-                    if (pageNo > 1)
-                    {
-                        queryData.Add(KeyValuePair.Create("pageNo", pageNo.ToString()));
-                    }
-
-                    var query = string.Join("&", queryData.Select(q => $"{q.Key}={q.Value}"));
-                    var url = query.Length > 0 ? $"api/instruments?{query}" : "api/instruments";
-
-                    var response = await _httpClient.GetAsync(url);
-        if(!response.IsSuccessStatusCode)
-        {
-            ErrorMessage = $"Ошибка при получении списка объектов: {response.ReasonPhrase}";
-            Success = false;
-            return;
-        }
-        var result = await response.Content.ReadFromJsonAsync<ResponseData<ListModel<MusicalInstrument>>>();
-        if (result == null || !result.Successfull)
-        {
-            ErrorMessage = result?.ErrorMessage ?? "Ошибка при получении списка объектов";
-            Success = false;
-            return;
+            var response = await _httpClient.GetAsync("api/categories");
+            if(!response.IsSuccessStatusCode)
+            {
+                ErrorMessage = $"Ошибка при получении списка категорий: {response.ReasonPhrase}";
+                Success = false;
+                DataLoaded?.Invoke();
+                return;
+            }
+            var result = await response.Content.ReadFromJsonAsync<ResponseData<List<Category>>>();
+            if (result != null && result.Successfull)
+            {
+                Categories = result.Data ?? new();
+                Success = true;
+            }
+            else
+            {
+                Categories = new();
+                Success = false;
+            }
+            DataLoaded?.Invoke();
         }
 
-        Success = true;
-        Instruments = result.Data?.Items ?? new();
-        TotalPages = result.Data?.TotalPages ?? 1;
-        CurrentPage = result.Data?.CurrentPage ?? 1;
-        DataLoaded?.Invoke();
-    }
+        public async Task GetInstrumentsListAsync(int pageNo = 1, string? categoryNormalizedName = null)
+        {
+            var tokenRequest = await _tokenProvider.RequestAccessToken();
+            if (tokenRequest.TryGetToken(out var token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+            }
+
+            if (categoryNormalizedName != null)
+            {
+                SelectedCategory = Categories.FirstOrDefault(c => c.NormalizedName == categoryNormalizedName);
+            }
+            else 
+            {
+                SelectedCategory = null;
+            }
+
+            List<KeyValuePair<string, string>> queryData = new();
+
+            if (SelectedCategory is not null)
+            {
+                queryData.Add(KeyValuePair.Create("category", SelectedCategory.NormalizedName));
+            }
+
+            if (pageNo > 1)
+            {
+                queryData.Add(KeyValuePair.Create("pageNo", pageNo.ToString()));
+            }
+
+            var query = string.Join("&", queryData.Select(q => $"{q.Key}={q.Value}"));
+            var url = query.Length > 0 ? $"api/instruments?{query}" : "api/instruments";
+
+            var response = await _httpClient.GetAsync(url);
+            if(!response.IsSuccessStatusCode)
+            {
+                ErrorMessage = $"Ошибка при получении списка объектов: {response.ReasonPhrase}";
+                Success = false;
+                DataLoaded?.Invoke();
+                return;
+            }
+            var result = await response.Content.ReadFromJsonAsync<ResponseData<ListModel<MusicalInstrument>>>();
+            if (result == null || !result.Successfull)
+            {
+                ErrorMessage = result?.ErrorMessage ?? "Ошибка при получении списка объектов";
+                Success = false;
+                DataLoaded?.Invoke();
+                return;
+            }
+
+            Success = true;
+            Instruments = result.Data?.Items ?? new();
+            TotalPages = result.Data?.TotalPages ?? 1;
+            CurrentPage = result.Data?.CurrentPage ?? 1;
+            DataLoaded?.Invoke();
+        }
 
 }

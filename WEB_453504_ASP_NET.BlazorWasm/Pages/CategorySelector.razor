@@ -34,8 +34,8 @@
 
     private async Task SelectCategory(Category? category)
     {
-        DataService.SelectedCategory = category;
-        await DataService.GetInstrumentsListAsync(1, category.NormalizedName);
+        await DataService.GetInstrumentsListAsync(1, category?.NormalizedName);
+        InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()

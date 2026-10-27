@@ -10,10 +10,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 var apiUri = builder.Configuration["ApiUri"] ?? "https://localhost:7002/";
 
-builder.Services.AddHttpClient<IDataService, DataService>(client =>
-{
-    client.BaseAddress = new Uri(apiUri);
-});
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiUri) });
+builder.Services.AddScoped<IDataService, DataService>();
 
 builder.Services.AddOidcAuthentication(options =>
 {

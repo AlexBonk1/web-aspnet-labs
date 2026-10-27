@@ -6,13 +6,10 @@
 
 <AuthorizeView Context="authContext">
     <Authorized>
-        <QuickGrid Items="@DataService.Instruments.AsQueryable()" Class="table table-striped">
+        <QuickGrid Items="@DataService.Instruments.AsQueryable()" @key="DataService.Instruments" Class="table table-striped">
             <PropertyColumn Property="@(d => d.Name)" Title="Название" Sortable="true" />
             <PropertyColumn Property="@(d => d.Description)" Title="Описание" />
             <TemplateColumn Title="Действие" Context="item">
-                <button class="btn btn-primary btn-sm me-2" @onclick="@(() => ShowDetails(item.Id))">
-                    Подробно
-                </button>
                 <button class="btn btn-outline-secondary btn-sm" @onclick="@(() => OnSelected.InvokeAsync(item.Id))">
                     Выбрать
                 </button>
@@ -58,7 +55,7 @@
     {
         if (pageNo >= 1 && pageNo <= DataService.TotalPages)
         {
-            await DataService.GetInstrumentsListAsync(pageNo);
+            await DataService.GetInstrumentsListAsync(pageNo, DataService.SelectedCategory?.NormalizedName);
         }
     }
 
