@@ -1,0 +1,45 @@
+@using WEB_453504_ASP_NET.BlazorWasm.Services
+@using WEB_453504_ASP_NET.Domain.Entities
+@inject NavigationManager Navigation
+@inject IDataService DataService
+@implements IDisposable
+
+<div class="dropdown mb-3">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+        @(DataService.SelectedCategory?.Name ?? "Все категории")
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li>
+            <button class="dropdown-item @(DataService.SelectedCategory == null ? "active" : "")" @onclick="() => SelectCategory(null)">
+                Все категории
+            </button>
+        </li>
+        @foreach (var category in DataService.Categories)
+        {
+            <li>
+                <button class="dropdown-item @(DataService.SelectedCategory?.Id == category.Id ? "active" : "")" @onclick="() => SelectCategory(category)">
+                    @category.Name
+                </button>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        DataService.DataLoaded += StateHasChanged;
+        await DataService.GetCategoryListAsync();
+    }
+
+    private async Task SelectCategory(Category? category)
+    {
+        DataService.SelectedCategory = category;
+        await DataService.GetInstrumentsListAsync(1, category.NormalizedName);
+    }
+
+    public void Dispose()
+    {
+        DataService.DataLoaded -= StateHasChanged;
+    }
+}

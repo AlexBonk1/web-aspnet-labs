@@ -1,0 +1,25 @@
+@using WEB_453504_ASP_NET.Domain.Entities
+
+@if (SelectedInstrument != null)
+{
+    <div class="card mt-4">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="@($"https://localhost:7002/{SelectedInstrument.ImageUrl}")" class="img-fluid rounded-start" alt="@SelectedInstrument.Name" style="max-height: 250px; object-fit: cover;" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title">@SelectedInstrument.Name</h4>
+                    <p class="card-text">@SelectedInstrument.Description</p>
+                    <p class="card-text"><strong>Цена: </strong> @SelectedInstrument.Price ₽</p>
+                    <p class="card-text"><strong>Вес: </strong> @SelectedInstrument.WeightKg кг</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public MusicalInstrument? SelectedInstrument { get; set; }
+}

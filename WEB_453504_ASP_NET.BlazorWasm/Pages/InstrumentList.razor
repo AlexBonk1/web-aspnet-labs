@@ -1,31 +1,28 @@
 ﻿@page "/items"
-@using WEB_453504_ASP_NET.BlazorWasm.Services
-@using WEB_453504_ASP_NET.Domain.Entities;
-@using static System.Net.WebRequestMethods
-@inject NavigationManager Navigation
-@inject IDataService DataService
+@using Microsoft.AspNetCore.Authorization
+@using WEB_453504_ASP_NET.Domain.Entities
+@attribute [Authorize]
+<PageTitle>Instruments</PageTitle>
 
-<QuickGrid Items="@instruments" Class="table table-striped">
-    <PropertyColumn Property="@(d => d.Name)" Title="Название" Sortable="true" />
-    <PropertyColumn Property="@(d => d.Description)" Title="Описание" />
-    <TemplateColumn Title="Действие">
-        <button class="btn btn-primary btn-sm" @onclick="">
-            Подробно
-        </button>
-    </TemplateColumn>
-</QuickGrid>
+<h3>Меню дня</h3>
+<CategorySelector />
+<InstrumentListComp OnSelected="OnInstrumentSelected" />
+<InstrumentDetails SelectedInstrument="SelectedInstrument" />
 
 @code {
-    private IQueryable<MusicalInstrument> instruments = Enumerable.Empty<MusicalInstrument>().AsQueryable();
-     @* private NavigationManager Navigation { get; set; } = default!;  *@
-    protected override async Task OnInitializedAsync()
+    [Inject]
+    public IDataService DataService { get; set; } = default!;
+
+    MusicalInstrument? SelectedInstrument { get; set; }
+
+    protected override async Task OnParametersSetAsync()
     {
-        await DataService.GetInstrumentsListAsync();
-        instruments = DataService.Instruments.AsQueryable();
+        await DataService.GetInstrumentsListAsync(1);
     }
 
-    private void ShowDetails(int id) 
+    void OnInstrumentSelected(int id)
     {
-        Navigation.NavigateTo($"/instrument/{id}");
+        SelectedInstrument = DataService.Instruments.FirstOrDefault(d => d.Id == id);
     }
 }
+

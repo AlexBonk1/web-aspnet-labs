@@ -15,9 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AppDbContext>());
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowKeycloak", policy =>
+    options.AddPolicy("AllowAllClients", policy =>
     {
-        policy.WithOrigins("http://localhost:8080")
+        policy.WithOrigins("http://localhost:8080", "https://localhost:7004", "http://localhost:5004")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -72,7 +72,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowKeycloak");
+app.UseCors("AllowAllClients");
 
 app.MapControllers();
 app.UseStaticFiles();

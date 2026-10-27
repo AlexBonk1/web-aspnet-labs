@@ -30,21 +30,21 @@ public static class InstrumentsEndpoint
             .DisableAntiforgery()
             .RequireAuthorization("admin");
 
-        group.MapGet("/", async (IMediator mediator, HybridCache cache,  [FromQuery] string? category, int pageNo = 1) =>
-        {
-            var data = await cache.GetOrCreateAsync($"dishes_{category}_{pageNo}",
-                                    async token => await mediator.Send(
-                                    new GetListOfInstruments(category, pageNo)),
-                                    options: new HybridCacheEntryOptions
-                                    {
-                                    Expiration=TimeSpan.FromMinutes(1),
-                                    LocalCacheExpiration = TimeSpan.FromSeconds(30)
-                                    }
-        );
-            return Results.Ok(data);
-        })
-        .WithName("GetAllMusicalInstruments")
-        .AllowAnonymous();
+                group.MapGet("/", async (IMediator mediator, HybridCache cache,  [FromQuery] string? category, int pageNo = 1) =>
+                {
+                    var data = await cache.GetOrCreateAsync($"dishes_{category}_{pageNo}",
+                                            async token => await mediator.Send(
+                                            new GetListOfInstruments(category, pageNo)),
+                                            options: new HybridCacheEntryOptions
+                                            {
+                                            Expiration=TimeSpan.FromMinutes(1),
+                                            LocalCacheExpiration = TimeSpan.FromSeconds(30)
+                                            }
+                );
+                    return Results.Ok(data);
+                })
+                .WithName("GetAllMusicalInstruments")
+                .AllowAnonymous();
 
 
         group.MapGet("/{id:int}", async Task<Results<Ok<MusicalInstrument>, NotFound>> (int id, AppDbContext db) =>
